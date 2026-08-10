@@ -21,7 +21,6 @@
     </p>
     
     <div id="chart-container"></div>
-
     <script>
         var chartDom = document.getElementById('chart-container');
         var myChart = echarts.init(chartDom);
@@ -35,64 +34,49 @@
             [25, 35, 22, 'Near-Infrared (NIR) Imaging', 'Passive Optical', 
              '• <b>Non-contact Real-time Monitoring:</b> Enables pixel-level quantitative disease assessment.<br>• <b>Anti-Autofluorescence:</b> NIR-II window (900-1700nm) significantly reduces chlorophyll autofluorescence, improving SNR and tissue penetration.<br>• <b>Low Cost:</b> Narrow-band systems require only a single camera.<br>• <b>Targeted Use:</b> Excellent for leaf water content estimation and semi-quantitative disease grading (e.g., wheat head blight).', 
              '• <b>Species-Dependent:</b> Reliability varies greatly by species; requires crop-specific calibration.<br>• <b>Lack of Standardization:</b> Missing standard protocols for sample prep and signal analysis.<br>• <b>Weak Early Detection:</b> Accuracy for mildly infected samples is lower than human visual observation.<br>• <b>Poor Generalization:</b> Insufficient long-term outdoor validation.'],
-
             [40, 50, 28, 'Multispectral Imaging (MSI)', 'Passive Optical', 
              '• <b>Comprehensive Data:</b> Captures multi-channel spectral features for physicochemical traits.<br>• <b>Non-invasive & Efficient:</b> Combines with UAVs for high-throughput field phenotyping.<br>• <b>Diagnosis & Prediction:</b> Captures invisible spectra (NIR/Red-edge) to assess vegetation indices and quantify health.', 
              '• <b>Lack of Standardization:</b> High data heterogeneity limits ML/DL model reproducibility.<br>• <b>Limited Generalization:</b> Models are constrained by environment and crop types.<br>• <b>Environmental Impact:</b> Cloud cover and lighting significantly affect prediction accuracy.'],
-
             [75, 80, 20, 'Hyperspectral Imaging (HSI)', 'Passive Optical', 
              '• <b>Simultaneous Acquisition:</b> Captures spatial and hundreds of continuous spectral bands ("spectral fingerprint").<br>• <b>Non-destructive:</b> Zero negative impact on products/environment.<br>• <b>Broad Application:</b> Timely and accurate stress identification, pest detection, and nutrient monitoring.', 
              '• <b>Data Complexity & Cost:</b> "Curse of dimensionality"; extreme computational and memory demands.<br>• <b>Environmental Artifacts:</b> Unstructured field factors introduce noise.<br>• <b>Spectral Confusion:</b> Same materials can exhibit different spectra (and vice versa), complicating analysis.'],
-
             [80, 65, 15, 'Short-Wave Infrared (SWIR)', 'Passive Optical', 
              '• <b>Water Variation Detection:</b> Highly sensitive to moisture changes in plant tissues.<br>• <b>Salt Stress Sensitivity:</b> Detects elevated reflectance due to ion imbalance.<br>• <b>Biochemical Markers:</b> Promising for detecting lignin and secondary metabolites.', 
              '• <b>High Cost:</b> Equipment costs thousands of dollars; bulky size limits field use.<br>• <b>Computationally Intensive:</b> Generates massive data requiring complex software.<br>• <b>Complex Calibration:</b> Highly susceptible to noise from light and humidity fluctuations.'],
-
             [30, 25, 12, 'Ultraviolet (UV) Imaging', 'Passive Optical', 
              '• <b>Plant-Pollinator Interaction:</b> Reveals UV floral patterns visible to pollinating insects.<br>• <b>Crop Breeding:</b> Helps breed varieties more attractive to beneficial insects.<br>• <b>Seed Quality Evaluation:</b> Useful for assessing seed disinfection and integrity.', 
              '• <b>Under-researched:</b> Focuses mainly on native plants, less on agricultural crops.<br>• <b>Greenhouse Limits:</b> UV-blocking covers significantly reduce effectiveness.<br>• <b>Hardware Limits:</b> Requires specialized lenses and filters.'],
-
             [50, 45, 16, 'Polarization Imaging', 'Passive Optical', 
              '• <b>High Contrast:</b> Strong background noise suppression capabilities.<br>• <b>Early Change Detection:</b> Clearly displays micro-moisture changes in early dehydration (R²=0.95 between depolarization index and water content).<br>• <b>Structural Info:</b> Contains micro-structural target information.', 
              '• <b>Low System Integration:</b> Equipment size and portability need optimization.<br>• <b>Parameter Sensitive:</b> Depolarization relationships are complex and easily affected.<br>• <b>Narrow Application:</b> Lacks comprehensive sample databases for model optimization.'],
-
             [45, 55, 24, 'Thermal Infrared (TIR)', 'Passive Thermal', 
              '• <b>Early Water Stress Detection:</b> Detects stomatal closure heating up to 84 hours earlier than visible symptoms.<br>• <b>High Resolution:</b> UAV mounting overcomes low-resolution satellite limitations.<br>• <b>Synergistic Application:</b> Fuses well with multispectral data for full health profiles.', 
              '• <b>Stress Ambiguity:</b> Cannot differentiate between drought and viral infections.<br>• <b>Advanced Processing Needs:</b> Requires complex image processing to eliminate soil background.<br>• <b>Equipment Cost:</b> High-resolution thermal cameras are expensive.'],
-
             [25, 35, 18, 'Passive 3D Imaging', 'Passive Geometric', 
              '• <b>High Cost-Effectiveness:</b> Relies on standard cameras and SfM/MVS algorithms.<br>• <b>High-Precision Point Clouds:</b> Generates highly detailed 3D features and geometry.<br>• <b>Mature Software:</b> Relatively standardized workflows.', 
              '• <b>Scene Dependency:</b> Performs poorly in low light, low texture, or severe occlusion.<br>• <b>Weak Field Robustness:</b> Wind and lighting changes drastically reduce reconstruction accuracy.<br>• <b>High Latency:</b> Struggles to meet real-time operational requirements.'],
-
             [55, 60, 16, 'Chlorophyll Fluorescence (CFI)', 'Active Fluorescence', 
              '• <b>Rich Physiological Info:</b> Directly reflects photosynthesis and physiological traits.<br>• <b>Early Detection:</b> Identifies disease or herbicide impact long before visible symptoms.', 
              '• <b>Limited Phenotypes:</b> Extracts a limited range of parameters when used alone.<br>• <b>Weak/Sensitive Signal:</b> Extremely sensitive to ambient light and sensor configuration.'],
-
             [60, 70, 15, 'Solar-Induced Fluorescence (SIF)', 'Passive Fluorescence', 
              '• <b>Core Remote Sensing Metric:</b> Directly quantifies photosynthetic capacity (GPP). Achieves 85% accuracy in corn GPP simulation and captures 78% of county-level yield variance.<br>• <b>Satellite Potential:</b> Massive potential for scaling from local to global monitoring.', 
              '• <b>Extreme Extraction Difficulty:</b> Signal is incredibly weak (1-2% of intercepted light) and easily drowned in noise.<br>• <b>Model Uncertainty:</b> Accuracy drops under extreme drought conditions.'],
-
             [65, 65, 12, 'Laser-Induced Fluorescence (LSF)', 'Active Fluorescence', 
              '• <b>Extreme Sensitivity:</b> Reveals details and chemicals invisible under conventional light.<br>• <b>Remote Probing:</b> Supports UAV-based scanning over field ranges.<br>• <b>Non-destructive:</b> Commonly used for precious botanical specimens.', 
              '• <b>Complex Operation:</b> Often requires 20-30 min dark adaptation and active light control.<br>• <b>Limited Quantification:</b> Mostly qualitative; suffers from photobleaching and quenching.'],
-
             [85, 85, 20, 'LiDAR', 'Active Structural Detection', 
              '• <b>High-Precision 3D Models:</b> Millimeter-level accuracy for ROI positioning.<br>• <b>Supports Automation & VRT:</b> Widely used in autonomous navigation and variable-rate applications (reduces pesticide use by 32.46% and drift by 44.34%).<br>• <b>Anti-Interference:</b> Unaffected by lighting; extremely strong canopy penetration.', 
              '• <b>Expensive Equipment:</b> High hardware cost hinders large-scale adoption.<br>• <b>Limited Efficiency:</b> Requires very low driving speeds to guarantee accuracy.<br>• <b>Wind Sensitive:</b> Strong winds severely degrade point cloud algorithmic accuracy.'],
-
             [90, 80, 18, 'Synthetic Aperture Radar (SAR)', 'Active Microwave Remote Sensing', 
              '• <b>All-Weather Observation:</b> Unaffected by clouds and day/night cycles; perfectly stable collection.<br>• <b>Strong Penetration & Inversion:</b> Low frequencies penetrate canopy to soil, effectively retrieving soil moisture, vegetation water content, and monitoring flood/lodging disasters.<br>• <b>Multi-polarization:</b> Extracts crop growth stages and biomass effectively.', 
              '• <b>Complex Data & Speckle Noise:</b> Multiplicative interference makes visual interpretation extremely difficult.<br>• <b>Geometric Distortion:</b> Suffers from radar-specific layover and foreshortening.<br>• <b>AI Dependency:</b> Relies heavily on deep learning, yet high-quality training data is scarce.'],
-
             [75, 90, 10, 'Optical Coherence Tomography (OCT)', 'Active Optical', 
              '• <b>In Vivo Real-Time Tomography:</b> Non-invasive capture of internal micro-sections and 3D images.<br>• <b>High Resolution:</b> 1-15μm resolution, far exceeding conventional methods.<br>• <b>Ultra-Early Infection Detection:</b> Spots anomalies via tissue layer thickness 5-6 days before necrosis appears.', 
              '• <b>Limited Penetration:</b> Penetrates only 2-3mm (top 3-5 cell layers) in most tissues.<br>• <b>Cannot See Tiny Pathogens:</b> Requires advanced signal processing.<br>• <b>Field Variability Vulnerability:</b> Mostly restricted to laboratory use.'],
-
             [95, 100, 10, 'X-ray Computed Tomography (CT)', 'Internal Tomography', 
              '• <b>Deepest Non-Destructive Tomography:</b> Obtains complete 3D structures and density maps without destruction.<br>• <b>Ultra-High Resolution:</b> Sub-micron imaging to precisely quantify xylem and cortex.<br>• <b>Powerful 3D Analysis:</b> Accurately captures volumetric structures and porosity.', 
              '• <b>Extreme Cost & Low Throughput:</b> Bulky, expensive equipment; long single-scan times.<br>• <b>Difficult Tissue Segmentation:</b> Low cell interface contrast makes it highly reliant on complex AI post-processing.<br>• <b>Unsuitable for Breeding:</b> Methodological limits prevent large-scale application.']
         ];
-
         const option = {
             tooltip: {
                 trigger: 'item',
@@ -120,14 +104,14 @@
                             </div>`;
                 }
             },
-            grid: { left: '8%', right: '8%', bottom: '10%', top: '5%' },
+            grid: { left: '8%', right: '8%', bottom: '10%', top: '8%' }, // 👈 调大了顶部空间
             xAxis: { 
                 name: 'Low ⬅️   Equipment Cost, Processing Difficulty & Operational Threshold   ➡️ Extremely High', 
                 nameLocation: 'middle', 
                 nameGap: 35,
                 nameTextStyle: { fontSize: 13, fontWeight: 'bold' },
                 splitLine: { lineStyle: { type: 'dashed', color: '#ecf0f1' } },
-                min: 0, max: 100,
+                min: -5, max: 115, // 👈 拓宽了 X 轴范围
                 axisLabel: { show: false }
             },
             yAxis: { 
@@ -136,13 +120,13 @@
                 nameGap: 40,
                 nameTextStyle: { fontSize: 13, fontWeight: 'bold' },
                 splitLine: { lineStyle: { type: 'dashed', color: '#ecf0f1' } },
-                min: 0, max: 110,
+                min: 5, max: 120, // 👈 拓宽了 Y 轴范围
                 axisLabel: { show: false }
             },
             series: [{
                 type: 'scatter',
                 data: data,
-                symbolSize: function (data) { return data[2]; }, 
+                symbolSize: function (data) { return data[2] * 0.75; }, // 👈 整体气泡缩小 25%
                 itemStyle: {
                     color: function(params) {
                         const colors = {
@@ -164,14 +148,16 @@
                 },
                 label: {
                     show: true,
-                    formatter: function (param) { return param.data[3]; },
+                    // 👈 让长的英文标签自动换行
+                    formatter: function (param) { 
+                        return param.data[3].replace(' (', '\n(').replace(' / ', '\n/ '); 
+                    },
                     position: 'top',
-                    distance: 10,
-                    textStyle: { fontSize: 12, fontWeight: 'bold', color: '#34495e', textBorderColor: '#fff', textBorderWidth: 2 }
+                    distance: 8,
+                    textStyle: { fontSize: 11, fontWeight: 'bold', color: '#34495e', textBorderColor: '#fff', textBorderWidth: 2 } // 👈 缩小字体至11
                 }
             }]
         };
-
         myChart.setOption(option);
         window.addEventListener('resize', function() { myChart.resize(); });
     </script>
