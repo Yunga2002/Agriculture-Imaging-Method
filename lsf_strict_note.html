@@ -104,6 +104,24 @@
                         textStyle: { fontSize: 12, fontWeight: 'bold', color: '#333' }
                     },
                    
+                                        // 使用 markArea 绘制背景的“交并补”概念区域
+                    markArea: {
+                        silent: true,
+                        data: [
+                            [
+                                { name: '生理生化探测能力优异\n但易受环境光干扰', xAxis: 50, yAxis: 0, itemStyle: { color: 'rgba(52, 152, 219, 0.05)' }, label: { position: 'insideBottomRight', color: '#3498db', fontSize: 14, fontWeight: 'bold', padding: 20 } },
+                                { xAxis: 110, yAxis: 50 }
+                            ],
+                            [
+                                { name: '主动抗干扰能力强\n但缺乏生理生化信息', xAxis: 0, yAxis: 50, itemStyle: { color: 'rgba(46, 204, 113, 0.05)' }, label: { position: 'insideTopLeft', color: '#27ae60', fontSize: 14, fontWeight: 'bold', padding: 20 } },
+                                { xAxis: 50, yAxis: 115 }
+                            ],
+                            [
+                                { name: '【大田理想探测区】\n兼具主动抗干扰与深度生化探测', xAxis: 50, yAxis: 50, itemStyle: { color: 'rgba(231, 76, 60, 0.08)' }, label: { position: 'insideTopRight', color: '#c0392b', fontSize: 16, fontWeight: 'bold', padding: 20 } },
+                                { xAxis: 110, yAxis: 115 }
+                            ]
+                        ]
+                    },
                     // 专门为 LSF 绘制它的 Gap 标注（指向完美顶点的距离）
                     markPoint: {
                         symbol: 'rect',
@@ -112,12 +130,13 @@
                         data: [
                             {
                                 coord: [92, 85], 
-                                value: ' Gap:\n1. 需 20-30分钟暗适应\n2. 易光漂白和猝灭\n3. 多为定性分析',
+                                value: '核心技术瓶颈 (Gap):\n1. 需长时间暗适应\n2. 易发生光漂白与猝灭\n3. 定量分析能力不足',
                                 itemStyle: { color: '#fff', borderColor: '#e74c3c', borderWidth: 2, shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.1)' },
-                                label: { color: '#c0392b', fontSize: 11, fontWeight: 'bold', lineHeight: 16 }
+                                label: { color: '#c0392b', fontSize: 12, fontWeight: 'bold', lineHeight: 16 }
                             }
                         ]
                     }
+
                 }
             ]
         };
