@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>16种独立成像技术坐标分布与 LSF 缺口分析</title>
+    <title>16种成像技术双维性能空间分布与 LSF 瓶颈分析</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <style>
         body { margin: 0; padding: 20px; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background-color: #f7f9fc; }
@@ -14,8 +14,8 @@
 </head>
 <body>
     <div class="header">
-        <h2>🎯 16项成像技术坐标映射与 LSF 缺口直观推演图</h2>
-        <p>每一个小圈代表一项独立技术。X轴与Y轴的交集定义了技术的上限，右上角的空白揭示了大田的终极诉求与 LSF 的最后一道门槛。</p>
+        <h2>🎯 16项成像技术双维性能空间分布与 LSF 瓶颈分析</h2>
+        <p>基于“生理生化探测能力 × 环境抗干扰能力”的二维性能空间。揭示大田理想探测区的技术需求及 LSF 亟待解决的科学问题。</p>
     </div>
     
     <div id="chart-container"></div>
@@ -24,36 +24,33 @@
         var chartDom = document.getElementById('chart-container');
         var myChart = echarts.init(chartDom);
         
-        // 数据结构：[X轴(生化探测能力), Y轴(主动抗光照能力), 气泡大小, 技术名称, 优势, 劣势]
-        // 坐标设计逻辑：
-        // X轴 (0-100)：越往左越偏向纯物理结构，越往右越偏向深层生理生化。
-        // Y轴 (0-100)：越往下越依赖环境光(易干扰)，越往上越是主动激发(抗干扰)。
+        // 数据结构：[X轴(生化探测能力), Y轴(环境鲁棒性), 气泡大小, 技术名称, 优势, 劣势]
         const data = [
-            // 1. 左下角：看结构 + 被动受光 (双弱)
-            [15, 15, 15, 'RGB 成像', '高通量，实时，低成本。', '仅看表面，极易受阴影反光干扰。'],
-            [25, 20, 15, '被动三维', '高精度点云，低成本。', '鲁棒性弱，受光照和风吹影响极大。'],
+            // 左下象限
+            [15, 15, 15, 'RGB 成像', '高通量，实时，低成本。', '仅获取表型几何/色彩信息，易受阴影反光干扰。'],
+            [25, 20, 15, '被动三维', '高精度点云，低成本。', '环境鲁棒性弱，受光照和风吹影响显著。'],
 
-            // 2. 右下角：看生理 + 被动受光 (偏科：怕光照)
+            // 右下象限
             [70, 30, 18, '多光谱(MSI)', '获取理化特性和植被指数。', '受云层和光照变化显著影响。'],
-            [75, 35, 18, '近红外(NIR)', '专用于水分和病害。', '物种依赖强，轻度感染识别弱。'],
-            [85, 20, 18, '高光谱(HSI)', '连续光谱指纹，极高分辨率。', '极易受农田环境干扰，数据极难处理。'],
-            [80, 25, 15, '短波红外(SWIR)', '极度敏感于水分变化。', '极易受光线、湿度波动引入噪声。'],
-            [60, 20, 15, '紫外(UV)', '揭示表面次生代谢物。', '穿透极浅，防紫外线覆盖物降低效用。'],
-            [65, 15, 15, '偏振成像', '高对比度，抑制背景。', '受诸多环境因素影响，参数敏感。'],
-            [90, 45, 18, '热红外(TIR)', '通过气孔升温提早预警。', '需复杂处理消除土壤背景干扰。'],
-            [95, 35, 15, '日光诱导荧光(SIF)', '直接量化光合能力(GPP)。', '信号极弱，极易被太阳背景噪声淹没。'],
+            [75, 35, 18, '近红外(NIR)', '专用于水分和病害。', '物种依赖强，跨场景泛化弱。'],
+            [85, 20, 18, '高光谱(HSI)', '连续光谱指纹，极高分辨率。', '环境背景光干扰大，数据维度灾难。'],
+            [80, 25, 15, '短波红外(SWIR)', '敏感于水分与特定生化标志物。', '易受光线、湿度波动引入噪声。'],
+            [60, 20, 15, '紫外(UV)', '揭示表面次生代谢物。', '穿透浅，易受大田强光背景掩盖。'],
+            [65, 15, 15, '偏振成像', '高对比度，抑制背景。', '受诸多环境因素影响，物理参数敏感。'],
+            [90, 45, 18, '热红外(TIR)', '通过气孔反应提早预警水分胁迫。', '需剔除复杂的土壤与环境背景干扰。'],
+            [95, 35, 15, '日光诱导荧光(SIF)', '直接量化光合生产力(GPP)。', '目标信号极弱，极易被太阳背景光谱重叠掩盖。'],
 
-            // 3. 左上角：看结构 + 主动激发 (偏科：生化盲)
-            [10, 85, 20, '激光雷达(LiDAR)', '完全不受光照影响，穿透冠层。', '无法提供丰富的色彩或化学信息。'],
-            [20, 95, 20, '合成孔径雷达(SAR)', '无视昼夜云雾，直达土壤。', '纯结构与物理水，解译极难。'],
-            [35, 80, 15, '相干断层(OCT)', '活体实时透视微观截面。', '穿透浅，需高级信号处理，限实验室。'],
-            [15, 100, 15, 'X射线(CT)', '最深层无损透视3D密度图。', '细胞界面对比度低(生化盲)，设备笨重。'],
+            // 左上象限
+            [10, 85, 20, '激光雷达(LiDAR)', '完全不受光照影响，穿透冠层。', '生理生化信息维度极为有限。'],
+            [20, 95, 20, '合成孔径雷达(SAR)', '无视昼夜云雾，直达土壤。', '主攻物理结构与介电常数，生化反演难度极高。'],
+            [35, 80, 15, '相干断层(OCT)', '活体实时透视微观截面。', '穿透极浅，多限于实验室内控环境。'],
+            [15, 100, 15, 'X射线(CT)', '最深层无损透视3D密度图。', '细胞界面生化对比度低，设备无法下地。'],
 
-            // 4. 右上角：看生理 + 主动激发 (终极交集区)
-            [80, 75, 18, '叶绿素荧光(CFI)', '主动激发，反映光合生理。', '对传感器配置极其敏感。'],
+            // 右上象限 (交集区)
+            [80, 75, 18, '叶绿素荧光(CFI)', '主动激发，反映光合生理状态。', '对测量条件及探头几何配置敏感。'],
             
-            // LSF 就在终极交集的门口
-            [92, 85, 22, '激光激发荧光 (LSF)', '自带激光远距离探测；极高灵敏度，发现不可见化学物质。', '需20-30分暗适应；易猝灭；多为定性。']
+            // LSF 定位
+            [92, 85, 22, '激光激发荧光 (LSF)', '主动远距离激发，高灵敏获取深层生理与多维生化信息。', '面临复杂田间环境下的定量反演与猝灭机制挑战。']
         ];
 
         const option = {
@@ -64,22 +61,22 @@
                 textStyle: { color: '#333' },
                 formatter: function (params) {
                     if(params.componentType === 'markArea') return '';
-                    return `<div style="max-width:300px; white-space:normal;">
-                                <h3 style="margin:0 0 10px 0; color:#2c3e50; border-bottom:1px solid #eee;">${params.data[3]}</h3>
-                                <p style="margin:5px 0; color:#27ae60;"><b>✔ 优势：</b>${params.data[4]}</p>
-                                <p style="margin:5px 0; color:#c0392b;"><b>✖ 劣势：</b>${params.data[5]}</p>
+                    return `<div style="max-width:320px; white-space:normal;">
+                                <h3 style="margin:0 0 10px 0; color:#2c3e50; border-bottom:1px solid #eee; padding-bottom:5px;">${params.data[3]}</h3>
+                                <p style="margin:5px 0; color:#27ae60; font-size:13px; line-height:1.5;"><b>✔ 优势：</b>${params.data[4]}</p>
+                                <p style="margin:5px 0; color:#c0392b; font-size:13px; line-height:1.5;"><b>✖ 局限：</b>${params.data[5]}</p>
                             </div>`;
                 }
             },
             grid: { left: '8%', right: '8%', bottom: '10%', top: '10%' },
             xAxis: { 
-                name: '纯物理形态探测 ⬅️   X轴：生理生化信息的挖掘深度   ➡️ 极深层生理化学探测', 
-                nameLocation: 'middle', nameGap: 30, nameTextStyle: { fontWeight: 'bold', fontSize: 14 },
+                name: '纯物理结构 ⬅️   X轴：生理生化信息的获取能力与维度   ➡️ 高维生理生化信息', 
+                nameLocation: 'middle', nameGap: 30, nameTextStyle: { fontWeight: 'bold', fontSize: 13 },
                 min: 0, max: 110, splitLine: { show: false }, axisLabel: { show: false }
             },
             yAxis: { 
-                name: '被动受环境光干扰 ⬇️   Y轴：主动激发与抗干扰能力   ⬆️ 完全主动抗干扰', 
-                nameLocation: 'middle', nameGap: 40, nameTextStyle: { fontWeight: 'bold', fontSize: 14 },
+                name: '受环境背景干扰 ⬇️   Y轴：环境鲁棒性与主动抗干扰能力   ⬆️ 强环境鲁棒性', 
+                nameLocation: 'middle', nameGap: 40, nameTextStyle: { fontWeight: 'bold', fontSize: 13 },
                 min: 0, max: 115, splitLine: { show: false }, axisLabel: { show: false }
             },
             series: [
@@ -89,11 +86,11 @@
                     symbolSize: function (data) { return data[2]; },
                     itemStyle: {
                         color: function(params) {
-                            if(params.data[3].includes('LSF')) return '#8e44ad'; // LSF 紫色
-                            if(params.data[1] < 50 && params.data[0] > 50) return '#3498db'; // 右下角蓝色
-                            if(params.data[1] > 50 && params.data[0] < 50) return '#2ecc71'; // 左上角绿色
-                            if(params.data[1] < 50 && params.data[0] < 50) return '#95a5a6'; // 左下角灰色
-                            return '#e67e22'; // 右上角橙色
+                            if(params.data[3].includes('LSF')) return '#8e44ad'; 
+                            if(params.data[1] < 50 && params.data[0] > 50) return '#3498db'; 
+                            if(params.data[1] > 50 && params.data[0] < 50) return '#2ecc71'; 
+                            if(params.data[1] < 50 && params.data[0] < 50) return '#95a5a6'; 
+                            return '#e67e22'; 
                         },
                         shadowBlur: 5, shadowColor: 'rgba(0,0,0,0.2)'
                     },
@@ -103,40 +100,36 @@
                         position: 'top',
                         textStyle: { fontSize: 12, fontWeight: 'bold', color: '#333' }
                     },
-                   
-                                        // 使用 markArea 绘制背景的“交并补”概念区域
                     markArea: {
                         silent: true,
                         data: [
                             [
-                                { name: '生理生化探测能力优异\n但易受环境光干扰', xAxis: 50, yAxis: 0, itemStyle: { color: 'rgba(52, 152, 219, 0.05)' }, label: { position: 'insideBottomRight', color: '#3498db', fontSize: 14, fontWeight: 'bold', padding: 20 } },
+                                { name: '生理生化信息获取能力强\n但环境背景光与散射影响显著', xAxis: 50, yAxis: 0, itemStyle: { color: 'rgba(52, 152, 219, 0.05)' }, label: { position: 'insideBottomRight', color: '#3498db', fontSize: 13, fontWeight: 'bold', padding: 20, lineHeight: 20 } },
                                 { xAxis: 110, yAxis: 50 }
                             ],
                             [
-                                { name: '主动抗干扰能力强\n但缺乏生理生化信息', xAxis: 0, yAxis: 50, itemStyle: { color: 'rgba(46, 204, 113, 0.05)' }, label: { position: 'insideTopLeft', color: '#27ae60', fontSize: 14, fontWeight: 'bold', padding: 20 } },
+                                { name: '主动抗环境光干扰能力强\n但生理生化信息维度有限', xAxis: 0, yAxis: 50, itemStyle: { color: 'rgba(46, 204, 113, 0.05)' }, label: { position: 'insideTopLeft', color: '#27ae60', fontSize: 13, fontWeight: 'bold', padding: 20, lineHeight: 20 } },
                                 { xAxis: 50, yAxis: 115 }
                             ],
                             [
-                                { name: '【大田理想探测区】\n兼具主动抗干扰与深度生化探测', xAxis: 50, yAxis: 50, itemStyle: { color: 'rgba(231, 76, 60, 0.08)' }, label: { position: 'insideTopRight', color: '#c0392b', fontSize: 16, fontWeight: 'bold', padding: 20 } },
+                                { name: '【大田理想探测区】\n兼具环境鲁棒性与\n高维生理生化信息获取能力', xAxis: 50, yAxis: 50, itemStyle: { color: 'rgba(231, 76, 60, 0.08)' }, label: { position: 'insideTopRight', color: '#c0392b', fontSize: 14, fontWeight: 'bold', padding: 20, lineHeight: 22 } },
                                 { xAxis: 110, yAxis: 115 }
                             ]
                         ]
                     },
-                    // 专门为 LSF 绘制它的 Gap 标注（指向完美顶点的距离）
                     markPoint: {
                         symbol: 'rect',
-                        symbolSize: [220, 80],
+                        symbolSize: [360, 105], // 拉宽尺寸以容纳严谨的学术长句
                         symbolOffset: [0, '-90%'],
                         data: [
                             {
                                 coord: [92, 85], 
-                                value: '核心技术瓶颈 (Gap):\n1. 需长时间暗适应\n2. 易发生光漂白与猝灭\n3. 定量分析能力不足',
+                                value: '核心技术瓶颈 (Gap):\n1. 部分荧光参数测定依赖稳定光化学状态或暗适应\n2. 重复或高能激发易引起荧光猝灭与光漂白\n3. 复杂田间环境下定量反演与跨场景校准能力有限',
                                 itemStyle: { color: '#fff', borderColor: '#e74c3c', borderWidth: 2, shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.1)' },
-                                label: { color: '#c0392b', fontSize: 12, fontWeight: 'bold', lineHeight: 16 }
+                                label: { color: '#c0392b', fontSize: 12, fontWeight: 'bold', lineHeight: 18, padding: [5, 10, 5, 10] }
                             }
                         ]
                     }
-
                 }
             ]
         };
