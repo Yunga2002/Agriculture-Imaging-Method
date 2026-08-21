@@ -103,24 +103,7 @@
                         position: 'top',
                         textStyle: { fontSize: 12, fontWeight: 'bold', color: '#333' }
                     },
-                    // 使用 markArea 绘制背景的“交并补”概念区域
-                    markArea: {
-                        silent: true,
-                        data: [
-                            [
-                                { name: '测生理极强\n但极易受光照干扰', xAxis: 50, yAxis: 0, itemStyle: { color: 'rgba(52, 152, 219, 0.05)' }, label: { position: 'insideBottomRight', color: '#3498db', fontSize: 14, fontWeight: 'bold', padding: 20 } },
-                                { xAxis: 110, yAxis: 50 }
-                            ],
-                            [
-                                { name: '不怕光照干扰\n但测不了化学与生理', xAxis: 0, yAxis: 50, itemStyle: { color: 'rgba(46, 204, 113, 0.05)' }, label: { position: 'insideTopLeft', color: '#27ae60', fontSize: 14, fontWeight: 'bold', padding: 20 } },
-                                { xAxis: 50, yAxis: 115 }
-                            ],
-                            [
-                                { name: '需同时满足：主动抗光照 + 测深层生理', xAxis: 50, yAxis: 50, itemStyle: { color: 'rgba(231, 76, 60, 0.08)' }, label: { position: 'insideTopRight', color: '#c0392b', fontSize: 16, fontWeight: 'bold', padding: 20 } },
-                                { xAxis: 110, yAxis: 115 }
-                            ]
-                        ]
-                    },
+                   
                     // 专门为 LSF 绘制它的 Gap 标注（指向完美顶点的距离）
                     markPoint: {
                         symbol: 'rect',
