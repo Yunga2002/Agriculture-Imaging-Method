@@ -2,217 +2,146 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>16种独立成像技术属性分布与 LSF 缺口可视化</title>
+    <title>16种独立成像技术交并补棋盘与 LSF 缺口分析</title>
     <style>
-        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        
-        .header { text-align: center; margin-bottom: 20px; z-index: 100; }
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background-color: #f4f7f9; margin: 0; padding: 20px; color: #333; }
+        .header { text-align: center; margin-bottom: 30px; position: relative; z-index: 10; }
         .header h1 { color: #2c3e50; font-size: 28px; margin-bottom: 5px; }
-        .header p { color: #7f8c8d; font-size: 14px; }
+        .header p { color: #7f8c8d; font-size: 15px; }
 
-        /* 维恩图整体画板 */
-        .venn-board {
+        /* 核心画板：固定宽度保证卡片不被挤压 */
+        .board {
             position: relative;
-            width: 1000px;
-            height: 900px;
+            width: 1500px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            padding: 40px;
+            box-sizing: border-box;
             background: #fff;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
             overflow: hidden;
         }
 
-        /* 三大能力集合圈 */
-        .circle {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            border: 3px solid;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding-top: 30px;
-            font-size: 20px;
-            font-weight: bold;
-            box-sizing: border-box;
+        /* 背景：交并补的维恩图圆环 */
+        .venn-bg-left {
+            position: absolute; width: 1000px; height: 1000px; border-radius: 50%;
+            background: rgba(52, 152, 219, 0.05); border: 2px dashed #3498db;
+            top: -50px; left: -150px; z-index: 1;
+        }
+        .venn-bg-right {
+            position: absolute; width: 1000px; height: 1000px; border-radius: 50%;
+            background: rgba(46, 204, 113, 0.05); border: 2px dashed #2ecc71;
+            top: -50px; right: -150px; z-index: 1;
         }
 
-        /* 集合A：生化与高灵敏 (红) */
-        .circle-a {
-            top: 60px; left: 140px;
-            background: rgba(231, 76, 60, 0.08);
-            border-color: rgba(231, 76, 60, 0.5);
-            color: #c0392b;
-        }
-        /* 集合B：主动激发抗光照 (蓝) */
-        .circle-b {
-            top: 60px; right: 140px;
-            background: rgba(52, 152, 219, 0.08);
-            border-color: rgba(52, 152, 219, 0.5);
-            color: #2980b9;
-        }
-        /* 集合C：实时/高通量/易操作 (绿) */
-        .circle-c {
-            bottom: 60px; left: 250px;
-            background: rgba(46, 204, 113, 0.08);
-            border-color: rgba(46, 204, 113, 0.5);
-            color: #27ae60;
-            align-items: flex-end; padding-top: 0; padding-bottom: 40px;
-        }
+        /* 每一列的容器 */
+        .col { position: relative; z-index: 10; display: flex; flex-direction: column; gap: 15px; }
+        .col-left { width: 32%; }
+        .col-center { width: 32%; margin-top: 80px; }
+        .col-right { width: 32%; }
 
-        /* 技术独立标签 (Pill) */
-        .tech-tag {
-            position: absolute;
-            background: #fff;
-            border: 1px solid #dcdde1;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            color: #2c3e50;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            transform: translate(-50%, -50%);
-            white-space: nowrap;
-            transition: all 0.2s;
-            z-index: 10;
+        /* 列标题 */
+        .col-title { text-align: center; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .col-title h2 { margin: 0; font-size: 18px; }
+        .col-title p { margin: 5px 0 0 0; font-size: 12px; color: #666; }
+
+        /* 独立的卡片设计 (每一个技术独立展示) */
+        .card {
+            background: #fff; border: 1px solid #e1e8ed; border-radius: 8px; padding: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: transform 0.2s;
         }
-        .tech-tag:hover { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 50; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
         
-        /* 标签小备注 */
-        .tag-sub { display: block; font-size: 10px; font-weight: normal; color: #7f8c8d; margin-top: 2px; }
+        .card h3 { margin: 0 0 8px 0; font-size: 14px; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .pro, .con { font-size: 12px; margin: 0 0 5px 0; line-height: 1.4; }
+        .pro { color: #27ae60; }
+        .con { color: #c0392b; }
+        .pro span, .con span { font-weight: bold; }
 
-        /* --- 16种技术的独立绝对坐标落位 (严格依据笔记属性) --- */
+        /* LSF 专属卡片 (降维打击与自身 Gap) */
+        .card-lsf {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 3px solid #8e44ad;
+            box-shadow: 0 8px 20px rgba(142, 68, 173, 0.2);
+            transform: scale(1.05);
+        }
+        .card-lsf:hover { transform: scale(1.08); }
+        .card-lsf h3 { color: #8e44ad; font-size: 18px; border-bottom: 2px solid #8e44ad; }
         
-        /* 只具备 A (生化灵敏) 的技术：受光照干扰、非实时或处理极难 */
-        #tag-hsi { top: 220px; left: 220px; }
-        #tag-swir { top: 270px; left: 180px; }
-        #tag-uv { top: 320px; left: 160px; }
-        #tag-sif { top: 370px; left: 200px; }
-        #tag-pol { top: 230px; left: 320px; }
-
-        /* 只具备 B (主动结构) 的技术：设备庞大/限实验室，无生化信息 */
-        #tag-ct { top: 250px; left: 780px; }
-        #tag-oct { top: 320px; left: 820px; }
-
-        /* 只具备 C (实时/简单) 的技术：无生化信息，被动易干扰 */
-        #tag-rgb { top: 760px; left: 400px; }
-        #tag-3d { top: 760px; left: 600px; }
-
-        /* 交集 A∩C (生化 + 实时)：多为多光谱类，但依然是被动受光照干扰 */
-        #tag-msi { top: 580px; left: 300px; }
-        #tag-nir { top: 630px; left: 350px; }
-        #tag-tir { top: 540px; left: 380px; }
-
-        /* 交集 B∩C (主动 + 实时)：能下地且不怕光，但是“生化盲” */
-        #tag-lidar { top: 580px; left: 700px; }
-        #tag-sar { top: 630px; left: 650px; }
-
-        /* 交集 A∩B (生化 + 主动)：不怕光且极灵敏，但缺实时定量！ */
-        #tag-cfi { top: 220px; left: 500px; }
-
-        /* 主角 LSF 闪亮登场 */
-        #tag-lsf {
-            top: 280px; left: 500px;
-            background: #8e44ad; color: #fff; border: 2px solid #9b59b6;
-            box-shadow: 0 0 15px rgba(142, 68, 173, 0.5); z-index: 20; padding: 10px 15px;
+        .lsf-gap {
+            background: #fdf3f2; border: 1px dashed #e74c3c; border-radius: 6px; padding: 10px; margin-top: 10px;
         }
-        #tag-lsf .tag-sub { color: #f1c40f; }
-
-        /* --- 核心 GAP 视觉呈现 --- */
-        
-        /* 终极空白区 (A∩B∩C) */
-        .holy-grail {
-            position: absolute;
-            top: 450px; left: 500px;
-            transform: translate(-50%, -50%);
-            width: 140px; height: 140px;
-            border-radius: 50%;
-            background: repeating-linear-gradient(45deg, rgba(231,76,60,0.1), rgba(231,76,60,0.1) 10px, transparent 10px, transparent 20px);
-            border: 2px dashed #e74c3c;
-            display: flex; align-items: center; justify-content: center; text-align: center;
-            color: #c0392b; font-weight: bold; font-size: 15px; animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(231,76,60,0.4); } 70% { box-shadow: 0 0 0 15px rgba(231,76,60,0); } 100% { box-shadow: 0 0 0 0 rgba(231,76,60,0); } }
-
-        /* LSF 自身的 GAP (锁死 LSF 往中心移动的物理障碍) */
-        .lsf-barrier {
-            position: absolute;
-            top: 350px; left: 500px;
-            transform: translate(-50%, 0);
-            background: #fff;
-            border: 2px solid #e67e22;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            color: #d35400;
-            font-weight: bold;
-            text-align: center;
-            z-index: 30;
-            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.2);
-        }
-        .lsf-barrier::after {
-            content: '▼'; display: block; color: #e74c3c; font-size: 18px; margin-top: 5px;
-        }
+        .lsf-gap h4 { margin: 0 0 5px 0; color: #c0392b; font-size: 13px; text-align: center; }
+        .lsf-gap p { margin: 0; font-size: 12px; color: #e74c3c; font-weight: bold; line-height: 1.4; }
 
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>🔍 16项成像技术空间分布与 LSF 缺口可视化图</h1>
-        <p>每一枚标签代表一项独立技术。摆放坐标严格遵循文献中“是否依赖光照、是否测生理、是否实时可用”的属性限制。</p>
+        <h1>🎯 16 项成像技术卡片交并补棋盘与 LSF 缺口推演</h1>
+        <p>每一张卡片完全独立。通过将它们落入集合 A (被动/生理) 与 集合 B (主动/结构)，自然浮现出中央交集的“终极需求与 Gap”。</p>
     </div>
 
-    <div class="venn-board">
-        
-        <!-- 三大集合圈 -->
-        <div class="circle circle-a">🧪 生理生化 / 高灵敏度<br><span style="font-size:12px; font-weight:normal; text-align:center; display:block;">(看透化学物质与光合)</span></div>
-        <div class="circle circle-b">🔦 主动激发 / 强抗干扰<br><span style="font-size:12px; font-weight:normal; text-align:center; display:block;">(自带光源,无视环境光)</span></div>
-        <div class="circle circle-c">⏱️ 大田高通量 / 实时定量<br><span style="font-size:12px; font-weight:normal; text-align:center; display:block; margin-top:5px;">(无需漫长准备,易操作)</span></div>
+    <div class="board">
+        <!-- 背景维恩图圈 -->
+        <div class="venn-bg-left"></div>
+        <div class="venn-bg-right"></div>
 
-        <!-- 技术标签落位区 -->
-
-        <!-- 只在A圈 -->
-        <div class="tech-tag" id="tag-hsi">高光谱 (HSI)<span class="tag-sub">复杂运算/易受干扰</span></div>
-        <div class="tech-tag" id="tag-swir">短波红外 (SWIR)<span class="tag-sub">校准极其复杂</span></div>
-        <div class="tech-tag" id="tag-uv">紫外成像 (UV)<span class="tag-sub">穿透浅/限温室</span></div>
-        <div class="tech-tag" id="tag-sif">日光诱导荧光 (SIF)<span class="tag-sub">信号极弱提取难</span></div>
-        <div class="tech-tag" id="tag-pol">偏振成像<span class="tag-sub">参数敏感/缺模型</span></div>
-
-        <!-- 只在B圈 -->
-        <div class="tech-tag" id="tag-ct">X射线 (CT)<span class="tag-sub">极贵且慢/生化盲</span></div>
-        <div class="tech-tag" id="tag-oct">相干断层 (OCT)<span class="tag-sub">限实验室/生化盲</span></div>
-
-        <!-- 只在C圈 -->
-        <div class="tech-tag" id="tag-rgb">可见光 (RGB)<span class="tag-sub">看表面/被动受光</span></div>
-        <div class="tech-tag" id="tag-3d">被动三维<span class="tag-sub">鲁棒性弱/被动受光</span></div>
-
-        <!-- 交集 A∩C -->
-        <div class="tech-tag" id="tag-msi">多光谱 (MSI)<span class="tag-sub">被动受云层光照影响</span></div>
-        <div class="tech-tag" id="tag-nir">近红外 (NIR)<span class="tag-sub">可靠性因物种差异大</span></div>
-        <div class="tech-tag" id="tag-tir">热红外 (TIR)<span class="tag-sub">需复杂处理除背景</span></div>
-
-        <!-- 交集 B∩C -->
-        <div class="tech-tag" id="tag-lidar">激光雷达 (LiDAR)<span class="tag-sub">无生化与颜色信息</span></div>
-        <div class="tech-tag" id="tag-sar">合成孔径雷达 (SAR)<span class="tag-sub">图像全散斑/难解译</span></div>
-
-        <!-- 交集 A∩B -->
-        <div class="tech-tag" id="tag-cfi">叶绿素荧光 (CFI)<span class="tag-sub">对配置极度敏感</span></div>
-        
-        <!-- 主角 LSF -->
-        <div class="tech-tag" id="tag-lsf">激光激发荧光 (LSF)<span class="tag-sub">极高灵敏化探 / 支持远距</span></div>
-
-        <!-- 视觉阻断与 GAP 呈现 -->
-        
-        <!-- 阻碍 LSF 往下(C圈)移动的壁垒 -->
-        <div class="lsf-barrier">
-            ⛔ LSF 自身痛点阻断了实时定量<br>
-            <span style="font-weight:normal; font-size:11px;">1. 需 20-30 分钟暗适应<br>2. 易光漂白和猝灭<br>3. 目前多为定性分析</span>
+        <!-- 集合 A 的独立卡片 (补集 A-B) -->
+        <div class="col col-left">
+            <div class="col-title">
+                <h2 style="color: #2980b9;">集合 A：被动获取生理生化</h2>
+                <p>提取深层化学特征，但 <b>极易受环境光照干扰</b></p>
+            </div>
+            
+            <div class="card"><h3>RGB 成像 / 被动三维</h3><p class="pro"><span>✔</span> 成本极低，高通量，普及率高。</p><p class="con"><span>✖</span> 受阴影反光干扰，无法探测内部成分。</p></div>
+            <div class="card"><h3>多光谱 (MSI) / 近红外 (NIR)</h3><p class="pro"><span>✔</span> 捕获超出可见光的波段，量化健康。</p><p class="con"><span>✖</span> 云层和光照变化显著影响预测准确性。</p></div>
+            <div class="card"><h3>高光谱 (HSI)</h3><p class="pro"><span>✔</span> 连续光谱指纹，提供极高生化分辨率。</p><p class="con"><span>✖</span> 农田非结构化因素易导致伪影和噪声。</p></div>
+            <div class="card"><h3>短波红外 (SWIR) / 热红外 (TIR)</h3><p class="pro"><span>✔</span> 对水分变化极其敏感，提早预警。</p><p class="con"><span>✖</span> 极易受光线、环境温度、风速等气象干扰。</p></div>
+            <div class="card"><h3>紫外 (UV) / 偏振</h3><p class="pro"><span>✔</span> 揭示不可见图案与微小含水变化。</p><p class="con"><span>✖</span> 防紫外线覆盖物降低效用，参数敏感。</p></div>
+            <div class="card"><h3>日光诱导荧光 (SIF)</h3><p class="pro"><span>✔</span> 被动量化光合能力 (GPP)。</p><p class="con"><span>✖</span> 信号微弱(1-2%)，极易被太阳背景噪声淹没。</p></div>
         </div>
 
-        <!-- 大田的终极 GAP -->
-        <div class="holy-grail">大田终极 GAP<br><span style="font-size:11px; font-weight:normal; color:#333; margin-top:5px; display:block;">急需一种：<br>不怕光+测生理+<br>免准备实时定量<br>的完美技术</span></div>
+        <!-- 交集 A∩B：LSF 填补区与自身的 Gap -->
+        <div class="col col-center">
+            <div class="col-title" style="background: transparent; box-shadow: none;">
+                <h2 style="color: #8e44ad; font-size: 22px;">交集 A ∩ B：农业终极诉求</h2>
+                <p style="color: #333; font-weight: bold; font-size:13px;">需要兼具【主动抗干扰】与【高灵敏生理探测】</p>
+            </div>
 
+            <div class="card">
+                <h3>叶绿素荧光 (CFI)</h3>
+                <p class="pro"><span>✔</span> 主动激发，直接反映光合作用。</p>
+                <p class="con"><span>✖</span> 参数有限，对传感器配置极其敏感。</p>
+            </div>
+
+            <!-- LSF 核心展示卡片 -->
+            <div class="card card-lsf">
+                <h3>激光激发荧光 (LIF / LSF)</h3>
+                <p class="pro"><span>✔ 契合交集要求：</span>自带激光激发，远距离探测；极高灵敏度，发现不可见化学物质。</p>
+                
+                <div class="lsf-gap">
+                    <h4>⚠️ LSF 亟需攻克的专属 GAP</h4>
+                    <p>1. 操作妥协：常需 20-30 分钟暗适应。<br>2. 物理干扰：存在光漂白和猝灭问题。<br>3. 算法瓶颈：定量能力有限，多为定性分析。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 集合 B 的独立卡片 (补集 B-A) -->
+        <div class="col col-right">
+            <div class="col-title">
+                <h2 style="color: #27ae60;">集合 B：主动探测物理结构</h2>
+                <p>自带发射源不怕光照，但 <b>缺乏生化特征感知能力</b></p>
+            </div>
+
+            <div class="card"><h3>激光雷达 (LiDAR)</h3><p class="pro"><span>✔</span> 高精度三维模型，完全不受环境光照影响。</p><p class="con"><span>✖</span> 无法提供任何色彩、生理或化学信息。</p></div>
+            <div class="card"><h3>合成孔径雷达 (SAR)</h3><p class="pro"><span>✔</span> 全天候(无视昼夜云雾)，直达土壤。</p><p class="con"><span>✖</span> 斑点噪声严重，依然侧重结构和物理水。</p></div>
+            <div class="card"><h3>光学相干断层 (OCT)</h3><p class="pro"><span>✔</span> 活体实时透视微观截面，超高分辨率。</p><p class="con"><span>✖</span> 穿透深度极有限(2-3毫米)，易受田间变异影响。</p></div>
+            <div class="card"><h3>X 射线断层 (CT)</h3><p class="pro"><span>✔</span> 最深层无损透视完整的密度与3D结构。</p><p class="con"><span>✖</span> 细胞界面对比度低(生化盲)，设备庞大难以落地。</p></div>
+        </div>
     </div>
 
 </body>
