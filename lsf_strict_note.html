@@ -24,6 +24,7 @@
         var chartDom = document.getElementById('chart-container');
         var myChart = echarts.init(chartDom);
         
+        // 严格按照专家意见修正的学术措辞数据
         const data = [
             // 左下象限
             [15, 15, 15, 'RGB 成像', '高通量，实时，低成本。', '主要获取表型几何与色彩信息，生理生化信息维度有限，易受阴影反光干扰。'],
@@ -48,7 +49,7 @@
             // 右上象限 (理想概念区)
             [80, 75, 18, '叶绿素荧光(CFI)', '主动激发，反映光合生理状态。', '对测量条件及探头几何配置敏感。'],
             
-            // LSF 定位
+            // LSF 定位 (克制、严谨的潜力表述)
             [92, 85, 22, '激光激发荧光 (LSF)', '主动远距离激发，具备高灵敏获取多维生理生化荧光信息的潜力。', '面临复杂田间环境下的定量反演与光化学状态变化的挑战。']
         ];
 
@@ -117,46 +118,17 @@
                             ]
                         ]
                     },
-                    // ==========================================
-                    // 修复 Bug：使用极其微小的隐形圆点作为文字框的锚点
-                    // ==========================================
                     markPoint: {
-                        symbol: 'circle',
-                        symbolSize: 0.1, // 极小，看不见
-                        itemStyle: { opacity: 0 }, // 完全透明
+                        symbol: 'rect',
+                        symbolSize: [390, 115], // 再次拉宽拉高，以完美容纳严谨的科研长句
+                        symbolOffset: ['-18%', '-115%'], 
                         data: [
                             {
-                                coord: [75, 110], // 锚点坐标，停留在右上角空白区
-                                label: {
-                                    show: true,
-                                    position: 'center', // 挂在锚点中心
-                                    formatter: '核心技术瓶颈 (Gap):\n1. 部分荧光参数测定依赖稳定光化学状态或暗适应\n2. 重复或高能激发可能引起荧光猝灭、光漂白及光化学状态变化\n3. 复杂田间环境下定量反演与跨场景校准能力有限',
-                                    backgroundColor: '#fff',
-                                    borderColor: '#e74c3c',
-                                    borderWidth: 2,
-                                    borderRadius: 8,
-                                    padding: [12, 16, 12, 16],
-                                    color: '#c0392b',
-                                    fontSize: 12,
-                                    fontWeight: 'bold',
-                                    lineHeight: 20,
-                                    align: 'left', // 保证学术长句左对齐
-                                    shadowBlur: 12,
-                                    shadowColor: 'rgba(0,0,0,0.1)'
-                                }
+                                coord: [92, 85], 
+                                value: '核心技术瓶颈 (Gap):\n1. 部分荧光参数测定依赖稳定光化学状态或暗适应\n2. 重复或高能激发可能引起荧光猝灭、光漂白及光化学状态变化\n3. 复杂田间环境下定量反演与跨场景校准能力有限',
+                                itemStyle: { color: '#fff', borderColor: '#e74c3c', borderWidth: 2, shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.1)' },
+                                label: { color: '#c0392b', fontSize: 12, fontWeight: 'bold', lineHeight: 18, padding: [8, 12, 8, 12], align: 'left' }
                             }
-                        ]
-                    },
-                    markLine: {
-                        silent: true,
-                        symbol: ['none', 'arrow'],
-                        symbolSize: 10,
-                        lineStyle: { color: '#e74c3c', width: 2, type: 'dashed' },
-                        data: [
-                            [
-                                { coord: [86.5, 106] }, // 箭头起点：对准文字框右下角
-                                { coord: [91.5, 87] }   // 箭头终点：对准 LSF 气泡
-                            ]
                         ]
                     }
                 }
