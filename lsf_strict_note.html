@@ -117,25 +117,47 @@
                             ]
                         ]
                     },
+                    // ==========================================
+                    // 💡 彻底抛弃死板的 rect，改用自适应包裹的 Label
+                    // ==========================================
                     markPoint: {
-                        symbol: 'rect',
-                        symbolSize: [410, 115], // 适度加宽，确保容纳多行文字
-                        symbolOffset: [0, '-105%'], // 居中正上方
+                        symbol: 'none', // 不再使用死板的矩形
                         data: [
                             {
-                                coord: [92, 85], 
-                                value: '核心技术瓶颈 (Gap):\n1. 部分荧光参数测定依赖稳定光化学状态或暗适应\n2. 重复或高能激发可能引起荧光猝灭及光漂白\n3. 复杂田间环境下定量反演与跨场景校准能力有限',
-                                itemStyle: { color: '#fff', borderColor: '#e74c3c', borderWidth: 2, shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.1)' },
-                                label: { color: '#c0392b', fontSize: 12, fontWeight: 'bold', lineHeight: 18, padding: [8, 12, 8, 12], align: 'left' }
+                                coord: [75, 112], // 停靠在上方左侧绝对安全的空白区，绝不越界
+                                label: {
+                                    show: true,
+                                    position: 'center',
+                                    formatter: '⚠️ 核心技术瓶颈 (Gap):\n1. 部分荧光参数测定依赖稳定光化学状态或暗适应\n2. 重复或高能激发可能引起荧光猝灭及光漂白\n3. 复杂田间环境下定量反演与跨场景校准能力有限',
+                                    backgroundColor: '#fff',
+                                    borderColor: '#e74c3c',
+                                    borderWidth: 2,
+                                    borderRadius: 8,
+                                    padding: [12, 16, 12, 16],
+                                    color: '#c0392b',
+                                    fontSize: 12,
+                                    fontWeight: 'bold',
+                                    lineHeight: 20,
+                                    align: 'left',
+                                    shadowBlur: 12,
+                                    shadowColor: 'rgba(0,0,0,0.1)'
+                                }
                             }
+                        ]
+                    },
+                    // 增加一条指向 LSF 气泡的虚线箭头，逻辑满分
+                    markLine: {
+                        silent: true,
+                        symbol: ['none', 'arrow'],
+                        symbolSize: 8,
+                        lineStyle: { color: '#e74c3c', width: 2, type: 'dashed' },
+                        data: [
+                            [
+                                { coord: [86, 107] }, // 箭头起点：白框边缘
+                                { coord: [91, 87] }   // 箭头终点：LSF气泡
+                            ]
                         ]
                     }
                 }
             ]
-        };
-
-        myChart.setOption(option);
-        window.addEventListener('resize', function() { myChart.resize(); });
-    </script>
-</body>
-</html>
+     
