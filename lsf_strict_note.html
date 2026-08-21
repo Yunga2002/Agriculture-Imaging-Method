@@ -117,15 +117,20 @@
                             ]
                         ]
                     },
+                    // ==========================================
+                    // 修复 Bug：使用极其微小的隐形圆点作为文字框的锚点
+                    // ==========================================
                     markPoint: {
-                        symbol: 'none',
+                        symbol: 'circle',
+                        symbolSize: 0.1, // 极小，看不见
+                        itemStyle: { opacity: 0 }, // 完全透明
                         data: [
                             {
-                                coord: [75, 112],
+                                coord: [75, 110], // 锚点坐标，停留在右上角空白区
                                 label: {
                                     show: true,
-                                    position: 'center',
-                                    formatter: '⚠️ 核心技术瓶颈 (Gap):\n1. 部分荧光参数测定依赖稳定光化学状态或暗适应\n2. 重复或高能激发可能引起荧光猝灭及光漂白\n3. 复杂田间环境下定量反演与跨场景校准能力有限',
+                                    position: 'center', // 挂在锚点中心
+                                    formatter: '核心技术瓶颈 (Gap):\n1. 部分荧光参数测定依赖稳定光化学状态或暗适应\n2. 重复或高能激发可能引起荧光猝灭、光漂白及光化学状态变化\n3. 复杂田间环境下定量反演与跨场景校准能力有限',
                                     backgroundColor: '#fff',
                                     borderColor: '#e74c3c',
                                     borderWidth: 2,
@@ -135,7 +140,7 @@
                                     fontSize: 12,
                                     fontWeight: 'bold',
                                     lineHeight: 20,
-                                    align: 'left',
+                                    align: 'left', // 保证学术长句左对齐
                                     shadowBlur: 12,
                                     shadowColor: 'rgba(0,0,0,0.1)'
                                 }
@@ -145,12 +150,12 @@
                     markLine: {
                         silent: true,
                         symbol: ['none', 'arrow'],
-                        symbolSize: 8,
+                        symbolSize: 10,
                         lineStyle: { color: '#e74c3c', width: 2, type: 'dashed' },
                         data: [
                             [
-                                { coord: [86, 107] },
-                                { coord: [91, 87] }
+                                { coord: [86.5, 106] }, // 箭头起点：对准文字框右下角
+                                { coord: [91.5, 87] }   // 箭头终点：对准 LSF 气泡
                             ]
                         ]
                     }
@@ -161,4 +166,5 @@
         myChart.setOption(option);
         window.addEventListener('resize', function() { myChart.resize(); });
     </script>
-</
+</body>
+</html>
