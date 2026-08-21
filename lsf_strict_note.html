@@ -117,14 +117,11 @@
                             ]
                         ]
                     },
-                    // ==========================================
-                    // 💡 彻底抛弃死板的 rect，改用自适应包裹的 Label
-                    // ==========================================
                     markPoint: {
-                        symbol: 'none', // 不再使用死板的矩形
+                        symbol: 'none',
                         data: [
                             {
-                                coord: [75, 112], // 停靠在上方左侧绝对安全的空白区，绝不越界
+                                coord: [75, 112],
                                 label: {
                                     show: true,
                                     position: 'center',
@@ -145,7 +142,6 @@
                             }
                         ]
                     },
-                    // 增加一条指向 LSF 气泡的虚线箭头，逻辑满分
                     markLine: {
                         silent: true,
                         symbol: ['none', 'arrow'],
@@ -153,11 +149,16 @@
                         lineStyle: { color: '#e74c3c', width: 2, type: 'dashed' },
                         data: [
                             [
-                                { coord: [86, 107] }, // 箭头起点：白框边缘
-                                { coord: [91, 87] }   // 箭头终点：LSF气泡
+                                { coord: [86, 107] },
+                                { coord: [91, 87] }
                             ]
                         ]
                     }
                 }
             ]
-     
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize', function() { myChart.resize(); });
+    </script>
+</
