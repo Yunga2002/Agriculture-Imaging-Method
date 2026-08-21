@@ -101,28 +101,20 @@
                         position: 'top',
                         textStyle: { fontSize: 12, fontWeight: 'bold', color: '#333' }
                     },
-                    markArea: {
-                        silent: true,
-                        data: [
-                            [
-                                { name: '生理生化信息获取能力强\n但环境背景光与散射影响显著', xAxis: 50, yAxis: 0, itemStyle: { color: 'rgba(52, 152, 219, 0.05)' }, label: { position: 'insideBottomRight', color: '#3498db', fontSize: 13, fontWeight: 'bold', padding: 20, lineHeight: 20 } },
-                                { xAxis: 115, yAxis: 50 }
-                            ],
-                            [
-                                { name: '主动抗环境光干扰能力强\n但生理生化信息维度有限', xAxis: 0, yAxis: 50, itemStyle: { color: 'rgba(46, 204, 113, 0.05)' }, label: { position: 'insideTopLeft', color: '#27ae60', fontSize: 13, fontWeight: 'bold', padding: 20, lineHeight: 20 } },
-                                { xAxis: 50, yAxis: 125 }
-                            ],
-                            [
-                                { name: '【大田理想探测区】\n兼具环境鲁棒性与\n高维生理生化信息获取能力', xAxis: 50, yAxis: 50, itemStyle: { color: 'rgba(231, 76, 60, 0.08)' }, label: { position: ['5%', '5%'], color: '#c0392b', fontSize: 14, fontWeight: 'bold', padding: 10, lineHeight: 22 } },
-                                { xAxis: 115, yAxis: 125 }
-                            ]
-                        ]
-                    },
                                         markPoint: {
                         symbol: 'rect',
                         symbolSize: [420, 110], // 稍微再加宽一点，确保文字绝不溢出
                         symbolOffset: [0, '-105%'], // 👈 关键修改：水平偏移改为 0，也就是正居中；垂直方向向上抬高
                         data: [
+                            {
+                                coord: [92, 85], 
+                                value: '核心技术瓶颈 (Gap):\n1. 部分荧光参数测定依赖稳定光化学状态或暗适应\n2. 重复或高能激发可能引起荧光猝灭、光漂白及光化学状态变化\n3. 复杂田间环境下定量反演与跨场景校准能力有限',
+                                itemStyle: { color: '#fff', borderColor: '#e74c3c', borderWidth: 2, shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.1)' },
+                                label: { color: '#c0392b', fontSize: 12, fontWeight: 'bold', lineHeight: 18, padding: [8, 12, 8, 12], align: 'left' } // 👈 增加 align: 'left' 保证长句对齐美观
+                            }
+                        ]
+                    }
+
                             {
                                 coord: [92, 85], 
                                 value: '核心技术瓶颈 (Gap):\n1. 部分荧光参数测定依赖稳定光化学状态或暗适应\n2. 重复或高能激发可能引起荧光猝灭、光漂白及光化学状态变化\n3. 复杂田间环境下定量反演与跨场景校准能力有限',
