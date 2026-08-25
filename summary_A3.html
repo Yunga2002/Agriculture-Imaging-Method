@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>A3 Summary: Crop Imaging Methods</title>
+    <style>
+        /* 设定页面大小为 A3 横向，适合打印 */
+        @page { size: A3 landscape; margin: 15mm; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #333; margin: 0; padding: 0; }
+        
+        .header { text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #2c3e50; }
+        .header h1 { margin: 0 0 5px 0; color: #2c3e50; font-size: 28px; }
+        .header p { margin: 0; color: #7f8c8d; font-size: 14px; font-style: italic; }
+
+        /* 4列网格布局，完美填满 A3 纸张 */
+        .container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        
+        /* 大类分类卡片 */
+        .category { background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef; overflow: hidden; }
+        .cat-header { padding: 10px; text-align: center; color: #fff; font-weight: bold; font-size: 16px; }
+        
+        /* 四个不重叠的类别颜色 */
+        .cat-1 .cat-header { background: #3498db; } /* Optical */
+        .cat-2 .cat-header { background: #e67e22; } /* Thermal/Microwave */
+        .cat-3 .cat-header { background: #8e44ad; } /* Fluorescence */
+        .cat-4 .cat-header { background: #27ae60; } /* 3D & Tomography */
+
+        /* 教授要求的代表性图片占位符 */
+        .image-placeholder { 
+            width: 100%; height: 120px; background: #eef2f5; display: flex; 
+            align-items: center; justify-content: center; color: #95a5a6; 
+            font-size: 12px; border-bottom: 1px solid #dee2e6;
+        }
+
+        /* 具体的每一个技术项 */
+        .tech-item { padding: 12px; border-bottom: 1px dashed #dee2e6; }
+        .tech-item:last-child { border-bottom: none; }
+        .tech-name { font-size: 14px; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
+        
+        /* 优缺点及文献 Inline */
+        ul { margin: 0; padding-left: 15px; font-size: 11px; line-height: 1.4; color: #444; }
+        .pro { color: #27ae60; }
+        .con { color: #c0392b; }
+        .ref { color: #7f8c8d; font-size: 10px; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Overview of Modern Crop Imaging Methods</h1>
+        <p>A comprehensive evaluation of capabilities, limitations, and field-scale readiness</p>
+    </div>
+
+    <div class="container">
+        
+        <!-- Category 1: Optical Reflectance -->
+        <div class="category cat-1">
+            <div class="cat-header">1. Optical Reflectance</div>
+            <div class="image-placeholder">[Insert Representative Optical Image Here]</div>
+            
+            <div class="tech-item">
+                <div class="tech-name">RGB Imaging</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> High throughput and low cost for morphological traits <span class="ref">[Kior et al., 2024]</span>.</li>
+                    <li><span class="con">Cons:</span> Shallow information depth; highly sensitive to illumination <span class="ref">[Ageh et al., 2025]</span>.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Multispectral (MSI)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> Captures invisible bands (NIR/Red-edge) for vegetation indices <span class="ref">[Ndour et al., 2025]</span>.</li>
+                    <li><span class="con">Cons:</span> Cloud cover impacts accuracy; limited generalization <span class="ref">[Xu et al., 2025]</span>.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Hyperspectral (HSI)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> Hundreds of continuous bands for precise stress/disease ID <span class="ref">[Shuai et al., 2024]</span>.</li>
+                    <li><span class="con">Cons:</span> Dimensionality curse; heavy computational demand <span class="ref">[Guerri et al., 2024]</span>.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Near/Short-Wave IR (NIR/SWIR)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> Highly sensitive to leaf water content and biochemical markers <span class="ref">[Alonso et al., 2026]</span>.</li>
+                    <li><span class="con">Cons:</span> Equipment is bulky/expensive; requires rigorous calibration <span class="ref">[Shoaib et al., 2026]</span>.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">UV & Polarization</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> UV reveals secondary metabolites; Polarization suppresses noise <span class="ref">[Jain et al., 2024]</span>.</li>
+                    <li><span class="con">Cons:</span> UV penetration is extremely shallow; Polarization models are highly parameter-sensitive.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Category 2: Thermal & Microwave -->
+        <div class="category cat-2">
+            <div class="cat-header">2. Thermal & Microwave (Beyond Visible)</div>
+            <div class="image-placeholder">[Insert Thermal/SAR Image Here]</div>
+            
+            <div class="tech-item">
+                <div class="tech-name">Thermal Infrared (TIR)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> Detects stomatal closure up to 84h before visible water stress symptoms appear <span class="ref">[Fevgas et al., 2025]</span>.</li>
+                    <li><span class="con">Cons:</span> Cannot differentiate drought from viral infections; requires background soil elimination <span class="ref">[Ndlovu et al., 2024]</span>.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Synthetic Aperture Radar (SAR)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> All-weather, day-and-night operation; penetrates canopy to assess structure and moisture <span class="ref">[Parag et al., 2024]</span>.</li>
+                    <li><span class="con">Cons:</span> Speckle noise complicates interpretation; biochemical inversion is extremely difficult <span class="ref">[Hashemi et al., 2024]</span>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Category 3: Fluorescence Emission -->
+        <div class="category cat-3">
+            <div class="cat-header">3. Fluorescence Emission</div>
+            <div class="image-placeholder">[Insert Fluorescence/LSF Image Here]</div>
+            
+            <div class="tech-item">
+                <div class="tech-name">Solar-Induced Fluorescence (SIF)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> Directly linked to Gross Primary Productivity (GPP) for large-scale monitoring <span class="ref">[Wang et al., 2025]</span>.</li>
+                    <li><span class="con">Cons:</span> Signal is extremely weak (1-2% of absorbed light); overwhelmed by solar background <span class="ref">[Choi et al., 2025]</span>.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Chlorophyll Fluorescence (CFI)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> Active excitation directly reflects photosynthetic physiological status.</li>
+                    <li><span class="con">Cons:</span> Highly sensitive to sensor configurations; standard LED sources have short effective ranges.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Laser-Induced Fluorescence (LSF/LIF)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> High-energy remote excitation reveals deep biochemical markers invisible to standard sensors <span class="ref">[Kaye & Pittman, 2020]</span>.</li>
+                    <li><span class="con">Cons (Gap):</span> Requires dark adaptation; prone to photobleaching/quenching; limited quantitative models in complex fields <span class="ref">[Yan et al., 2025]</span>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Category 4: 3D & Tomography -->
+        <div class="category cat-4">
+            <div class="cat-header">4. 3D Structure & Tomography</div>
+            <div class="image-placeholder">[Insert LiDAR/CT Image Here]</div>
+            
+            <div class="tech-item">
+                <div class="tech-name">Passive 3D (SfM / MVS)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> Generates detailed point clouds at very low equipment costs <span class="ref">[Ghose et al., 2026]</span>.</li>
+                    <li><span class="con">Cons:</span> Extremely sensitive to wind and illumination changes in open fields.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">LiDAR (Active 3D)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> Millimeter-level precision; immune to lighting conditions; penetrates canopy <span class="ref">[Rivera et al., 2023]</span>.</li>
+                    <li><span class="con">Cons:</span> High hardware cost; provides geometric data but lacks biochemical information <span class="ref">[Palleja & Landers, 2015]</span>.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Optical Coherence Tomography (OCT)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> In-vivo real-time microscopic cross-section imaging (1-15μm resolution) <span class="ref">[Sasi et al., 2025]</span>.</li>
+                    <li><span class="con">Cons:</span> Penetration depth limited to 2-3mm; restricted mainly to controlled lab settings <span class="ref">[Saleah et al., 2022]</span>.</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">X-ray Computed Tomography (CT)</div>
+                <ul>
+                    <li><span class="pro">Pros:</span> Deepest non-destructive 3D density mapping for internal plant structures <span class="ref">[Wood et al., 2024]</span>.</li>
+                    <li><span class="con">Cons:</span> Bulky equipment, high cost, and unsuitability for large-scale field breeding <span class="ref">[Van Doorselaer et al., 2025]</span>.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
